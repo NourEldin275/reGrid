@@ -115,8 +115,8 @@ class Grid extends Component{
         return(
             <table className="table table-bordered table-responsive">
                 <thead>
-                    <HeaderRow columns={columns} />
-                    <HeaderFiltersRow columns={columns} />
+                    <HeaderRow columns={columns} onSort={this.handleSort} />
+                    <HeaderFiltersRow columns={columns} onFilterChange={this.handleFilterChange} />
                 </thead>
                 <TableBody rows={this.props.rows} />
             </table>
@@ -138,7 +138,6 @@ class App extends Component {
             {
                 label: 'ID',
                 id: 'id',
-                sortHandler: this.handleSort,
                 filter: {
                     enabled: false
                 }
@@ -146,37 +145,42 @@ class App extends Component {
             {
                 label: 'Title',
                 id: 'title',
-                sortHandler: this.handleSort,
                 filter: {
                     enabled: true,
                     type: 'text',
-                    changeHandler: this.handleFilterChange,
                     placeHolder: 'Filter ...'
                 },
-                editable: true
+                editing: {
+                    enabled: true,
+                    type: 'text',
+                }
+
 
             },
             {
                 label: 'Count',
                 id: 'count',
-                sortHandler: this.handleSort,
                 filter: {
                     enabled: true,
                     type: 'number',
-                    changeHandler: this.handleFilterChange,
                     min: -5,
                     max: 100
                 },
-                editable: true
+                editing: {
+                    enabled: true,
+                    type: 'number',
+                    options: {
+                        min: 0,
+                        max: 1000
+                    }
+                }
             },
             {
                 label: 'List',
                 id: 'list',
-                sortHandler: this.handleSort,
                 filter: {
                     enabled: true,
                     type: 'select',
-                    changeHandler: this.handleFilterChange,
                     options: [
                         {
                             label: '...',
@@ -196,18 +200,34 @@ class App extends Component {
                         }
                     ]
                 },
-                editable: true
+                editing: {
+                    enabled: true,
+                    type: 'select',
+                    options: {
+                        options: [
+                            {
+                                label: 'Opt 1',
+                                value: '1'
+                            },
+                            {
+                                label: 'Opt 2',
+                                value: '2'
+                            }
+                        ]
+                    }
+                }
             },
             {
                 label: 'Toggle',
                 id: 'toggle',
-                sortHandler: this.handleSort,
                 filter: {
                     enabled: true,
                     type: 'checkbox',
-                    changeHandler: this.handleFilterChange
                 },
-                editable: true
+                editing: {
+                    enabled: true,
+                    type: 'checkbox'
+                }
             }
         ];
 

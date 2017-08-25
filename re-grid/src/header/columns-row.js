@@ -7,9 +7,15 @@ class HeaderRow extends Component{
 
     render(){
         const columns = this.props.columns;
+        const sortHandler = this.props.onSort;
         const columnConfig = columns.map((column) =>
             <td key={column.id.toString()}>
-                {column.label} <span name={column.id} className="sort-direction-toggle glyphicon glyphicon-sort" aria-hidden="true" onClick={column.sortHandler}></span>
+                {column.label}
+                <span
+                    name={column.id}
+                    className="sort-direction-toggle glyphicon glyphicon-sort"
+                    aria-hidden="true"
+                    onClick={sortHandler}></span>
             </td>
         );
         return(
