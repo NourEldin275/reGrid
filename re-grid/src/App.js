@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
+import HeaderRow from './header/columns-row';
+import HeaderFiltersRow from './header/filters-row';
 
 
 class Grid extends Component{
@@ -90,7 +92,14 @@ class Grid extends Component{
         let field = event.target;
         let filters = this.state.filters;
         let filterName = field.getAttribute('name');
-        if (field.type === 'checkbox'){
+
+        if (!field.validity.valid){
+            if(field.type === 'number'){
+                delete filters[filterName];
+            }else{
+                return;
+            }
+        }else if (field.type === 'checkbox'){
             filters[filterName] = field.checked;
         }else{
             filters[filterName] = field.value;
@@ -103,44 +112,84 @@ class Grid extends Component{
 
 
     buildGrid(){
+        let columns = [
+            {
+                label: 'ID',
+                id: 'id',
+                sortHandler: this.handleSort,
+                filter: {
+                    enabled: false
+                }
+            },
+            {
+                label: 'Title',
+                id: 'title',
+                sortHandler: this.handleSort,
+                filter: {
+                    enabled: true,
+                    type: 'text',
+                    changeHandler: this.handleFilterChange,
+                    placeHolder: 'Filter ...'
+                },
+
+            },
+            {
+                label: 'Count',
+                id: 'count',
+                sortHandler: this.handleSort,
+                filter: {
+                    enabled: true,
+                    type: 'number',
+                    changeHandler: this.handleFilterChange,
+                    min: -5,
+                    max: 100
+                },
+            },
+            {
+                label: 'List',
+                id: 'list',
+                sortHandler: this.handleSort,
+                filter: {
+                    enabled: true,
+                    type: 'select',
+                    changeHandler: this.handleFilterChange,
+                    options: [
+                        {
+                            label: '...',
+                            value: ''
+                        },
+                        {
+                            label: 'Opt 1',
+                            value: '1'
+                        },
+                        {
+                            label: 'Opt 2',
+                            value: '2'
+                        },
+                        {
+                            label: 'Opt 3',
+                            value: '3'
+                        }
+                    ]
+                },
+            },
+            {
+                label: 'Toggle',
+                id: 'toggle',
+                sortHandler: this.handleSort,
+                filter: {
+                    enabled: true,
+                    type: 'checkbox',
+                    changeHandler: this.handleFilterChange
+                }
+            }
+        ];
+
         return(
             <table className="table table-bordered table-responsive">
                 <thead>
-                    <tr>
-                        <td>
-                            ID <span name="id" className="sort-direction-toggle glyphicon glyphicon-sort" aria-hidden="true" onClick={this.handleSort}></span>
-                        </td>
-                        <td>
-                            Title <span name="title" className="sort-direction-toggle glyphicon glyphicon-sort" aria-hidden="true" onClick={this.handleSort}></span>
-                        </td>
-                        <td>
-                            Count <span name="count" className="sort-direction-toggle glyphicon glyphicon-sort" aria-hidden="true" onClick={this.handleSort}></span>
-                        </td>
-                        <td>
-                            List <span name="list" className="sort-direction-toggle glyphicon glyphicon-sort" aria-hidden="true" onClick={this.handleSort}></span>
-                        </td>
-                        <td>
-                            Toggle <span name="toggle" className="sort-direction-toggle glyphicon glyphicon-sort" aria-hidden="true" onClick={this.handleSort}></span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td><input name="title" type="text" placeholder="filter..." onChange={this.handleFilterChange}/></td>
-                        <td><input type="number" name="count" onChange={this.handleFilterChange}/></td>
-                        <td><select name="list" id="" onChange={this.handleFilterChange}>
-                            <option value=''>...</option>
-                            <option value='1'>Opt1</option>
-                            <option value='2'>Opt2</option>
-                            <option value='3'>Opt3</option>
-                            <option value='4'>Opt4</option>
-                            <option value='5'>Opt5</option>
-                            <option value='6'>Opt6</option>
-                            <option value='7'>Opt7</option>
-                            <option value='8'>Opt8</option>
-                            <option value='9'>Opt9</option>
-                        </select></td>
-                        <td><input type="checkbox" name="toggle" onChange={this.handleFilterChange}/></td>
-                    </tr>
+                    <HeaderRow columns={columns} />
+                    <HeaderFiltersRow columns={columns} />
                 </thead>
             </table>
         );
