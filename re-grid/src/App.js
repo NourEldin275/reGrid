@@ -31,8 +31,9 @@ class Grid extends Component{
             onEditRemote: callback used to edit data remotely.
 
          */
-        this.handleFilterChange = this.handleFilterChange.bind(this);
+        this.onFilterChangeHandler = this.onFilterChangeHandler.bind(this);
         this.handleSort = this.handleSort.bind(this);
+        this.onFilterEnterHandler = this.onFilterEnterHandler.bind(this);
     }
 
     handleSort(event){
@@ -89,7 +90,7 @@ class Grid extends Component{
         });
     }
 
-    handleFilterChange(event){
+    onFilterChangeHandler(event){
         let field = event.target;
         let filters = this.state.filters;
         let filterName = field.getAttribute('name');
@@ -105,27 +106,44 @@ class Grid extends Component{
         }else{
             filters[filterName] = field.value;
         }
-        this.setState({
-            filters: filters
-        });
+        if(event.target.type === 'checkbox' || event.target.type === 'select-one'){
+            // fire remote filter for fields that need no Enter key stroke.
+            this.setState({
+                filters: filters
+            }, this.props.remoteFilterHandler(this.state.filters));
+        }else{
+            this.setState({
+                filters: filters
+            });
+        }
+
     }
 
-    buildGrid(){
-        const columns = this.props.columns;
-        return(
-            <table className="table table-bordered table-responsive">
-                <thead>
-                    <HeaderRow columns={columns} onSort={this.handleSort} />
-                    <HeaderFiltersRow columns={columns} onFilterChange={this.handleFilterChange} />
-                </thead>
-                <TableBody rows={this.props.rows} />
-            </table>
-        );
+    /**
+     * This method will call the passed remote filter handler only when "Enter" key is pressed.
+     * @param event
+     */
+    onFilterEnterHandler(event){
+        if(this.state.filters && event.keyCode === 13){
+            this.props.remoteFilterHandler(this.state.filters);
+        }
     }
 
     render(){
+        const columns = this.props.columns;
+        const rows = this.props.rows;
         return(
-            this.buildGrid()
+            <table className="table table-bordered table-responsive">
+                <thead>
+                <HeaderRow columns={columns} onSort={this.handleSort} />
+                <HeaderFiltersRow
+                    columns={columns}
+                    onFilterChangeHandler={this.onFilterChangeHandler}
+                    onFilterEnterHandler={this.onFilterEnterHandler}
+                />
+                </thead>
+                <TableBody rows={rows} />
+            </table>
         );
     }
 }
@@ -231,38 +249,34 @@ class App extends Component {
             }
         ];
 
-        this.rows = [
-            [
-                {
-                    id: 'id',
-                    value: '939'
-                },
-                {
-                    id: 'title',
-                    value: 'First Row'
-                },
-                {
-                    id: 'count',
-                    value: 4.4
-                },
-                {
-                    id: 'list',
-                    value: 'Opt 3'
-                },
-                {
-                    id: 'toggle',
-                    value: "false"
-                },
+        this.rows = [];
+        this.remoteFilterHandler = this.remoteFilterHandler.bind(this);
+        this.createRows = this.createRows.bind(this);
+        this.state = {
+            rows: this.rows
+        }
+    }
 
-            ],
-            [
+    remoteFilterHandler(filters){
+        // This is where Ajax requests are sent and then the rows in the state of this component should be updated to update the grid
+        this.createRows(10);
+    }
+
+    componentWillMount(){
+        this.createRows(5);
+    }
+
+    createRows(rowCount){
+        this.rows = [];
+        for (let i=0; i<rowCount; i++){
+            this.rows.push([
                 {
                     id: 'id',
-                    value: '949'
+                    value: Math.random() * 100
                 },
                 {
                     id: 'title',
-                    value: 'Second Row'
+                    value: 'Row #'+i,
                 },
                 {
                     id: 'count',
@@ -274,18 +288,16 @@ class App extends Component {
                 },
                 {
                     id: 'toggle',
-                    value: "true"
-                },
-
-            ]
-
-        ];
-
+                    value: (!!(i%2)).toString()
+                }
+            ]);
+        }
+        this.setState({rows: this.rows});
     }
 
   render() {
     return (
-      <Grid columns={this.columns} rows={this.rows} />
+      <Grid columns={this.columns} rows={this.state.rows} remoteFilterHandler={this.remoteFilterHandler}/>
     );
   }
 }

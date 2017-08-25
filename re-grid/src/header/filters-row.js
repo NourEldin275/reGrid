@@ -10,7 +10,8 @@ class HeaderFiltersRow extends Component{
         const numberInput   = 'number';
         const checkboxInput = 'checkbox';
         const selectInput   = 'select';
-        const filterChangeHandler = this.props.onFilterChange;
+        const filterChangeHandler = this.props.onFilterChangeHandler;
+        const filterOnEnterHandler = this.props.onFilterEnterHandler;
         let filter = '';
         if (column.filter || column.filter.enabled){
 
@@ -20,6 +21,7 @@ class HeaderFiltersRow extends Component{
                         type={textInput}
                         name={column.id}
                         onChange={filterChangeHandler}
+                        onKeyUp={filterOnEnterHandler}
                         placeholder={column.filter.placeHolder}
                     />;
                     break;
@@ -28,6 +30,7 @@ class HeaderFiltersRow extends Component{
                         type={numberInput}
                         name={column.id}
                         onChange={filterChangeHandler}
+                        onKeyUp={filterOnEnterHandler}
                         min={column.filter.min}
                         max={column.filter.max}
                         step="any"

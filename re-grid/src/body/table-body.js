@@ -5,21 +5,17 @@ import React, { Component } from 'react';
 import { Cell } from './cells/cells';
 
 class TableBody extends Component{
-    constructor(props){
-        super(props);
-        this.rows = this.props.rows;
-    }
 
     render(){
 
         let rows = [];
-        for (let row of this.rows) {
+        for (let row of this.props.rows) {
             let rowData = row.map((data) => {
                 return(<Cell key={data.id.toString()} value={data.value} />);
             });
 
             let tableRow =
-                <tr key={this.rows.indexOf(row)}>{rowData}</tr>;
+                <tr key={this.props.rows.indexOf(row)}>{rowData}</tr>;
             rows.push(tableRow);
         }
 
