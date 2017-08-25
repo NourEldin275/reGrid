@@ -11,11 +11,20 @@ class TableBody extends Component{
         let rows = [];
         for (let row of this.props.rows) {
             let rowData = row.map((data) => {
-                return(<Cell key={data.id.toString()} value={data.value} />);
+                return(
+                    <Cell
+                        key={data.id.toString()}
+                        value={data.value}
+                        editing={data.editing}
+                    />
+                );
             });
 
             let tableRow =
-                <tr key={this.props.rows.indexOf(row)}>{rowData}</tr>;
+                <tr
+                    key={this.props.rows.indexOf(row)}
+                    data-row-key={this.props.rows.indexOf(row)}
+                >{rowData}</tr>;
             rows.push(tableRow);
         }
 

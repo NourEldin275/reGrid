@@ -284,18 +284,50 @@ class App extends Component {
                 {
                     id: 'title',
                     value: 'Row #'+i,
+                    editing: {
+                        enabled: true,
+                        type: 'text',
+                    }
                 },
                 {
                     id: 'count',
-                    value: 60.48
+                    value: 60.48,
+                    editing: {
+                        enabled: true,
+                        type: 'number',
+                        options: {
+                            min: 0,
+                            max: 1000
+                        }
+                    }
                 },
                 {
                     id: 'list',
-                    value: 'Opt 1'
+                    value: 'Opt 1',
+                    editing: {
+                        enabled: true,
+                        type: 'select',
+                        options: {
+                            options: [
+                                {
+                                    label: 'Opt 1',
+                                    value: '1'
+                                },
+                                {
+                                    label: 'Opt 2',
+                                    value: '2'
+                                }
+                            ]
+                        }
+                    }
                 },
                 {
                     id: 'toggle',
-                    value: (!!(i%2)).toString()
+                    value: (!!(i%2)),
+                    editing: {
+                        enabled: true,
+                        type: 'checkbox'
+                    }
                 }
             ]);
         }
