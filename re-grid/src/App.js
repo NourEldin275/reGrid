@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import HeaderRow from './header/columns-row';
 import HeaderFiltersRow from './header/filters-row';
+import TableBody from './body/table-body';
 
 
 class Grid extends Component{
@@ -109,10 +110,31 @@ class Grid extends Component{
         });
     }
 
-
-
     buildGrid(){
-        let columns = [
+        const columns = this.props.columns;
+        return(
+            <table className="table table-bordered table-responsive">
+                <thead>
+                    <HeaderRow columns={columns} />
+                    <HeaderFiltersRow columns={columns} />
+                </thead>
+                <TableBody rows={this.props.rows} />
+            </table>
+        );
+    }
+
+    render(){
+        return(
+            this.buildGrid()
+        );
+    }
+}
+
+class App extends Component {
+
+    constructor(props){
+        super(props);
+        this.columns = [
             {
                 label: 'ID',
                 id: 'id',
@@ -131,6 +153,7 @@ class Grid extends Component{
                     changeHandler: this.handleFilterChange,
                     placeHolder: 'Filter ...'
                 },
+                editable: true
 
             },
             {
@@ -144,6 +167,7 @@ class Grid extends Component{
                     min: -5,
                     max: 100
                 },
+                editable: true
             },
             {
                 label: 'List',
@@ -172,6 +196,7 @@ class Grid extends Component{
                         }
                     ]
                 },
+                editable: true
             },
             {
                 label: 'Toggle',
@@ -181,31 +206,66 @@ class Grid extends Component{
                     enabled: true,
                     type: 'checkbox',
                     changeHandler: this.handleFilterChange
-                }
+                },
+                editable: true
             }
         ];
 
-        return(
-            <table className="table table-bordered table-responsive">
-                <thead>
-                    <HeaderRow columns={columns} />
-                    <HeaderFiltersRow columns={columns} />
-                </thead>
-            </table>
-        );
+        this.rows = [
+            [
+                {
+                    id: 'id',
+                    value: '939'
+                },
+                {
+                    id: 'title',
+                    value: 'First Row'
+                },
+                {
+                    id: 'count',
+                    value: 4.4
+                },
+                {
+                    id: 'list',
+                    value: 'Opt 3'
+                },
+                {
+                    id: 'toggle',
+                    value: "false"
+                },
+
+            ],
+            [
+                {
+                    id: 'id',
+                    value: '949'
+                },
+                {
+                    id: 'title',
+                    value: 'Second Row'
+                },
+                {
+                    id: 'count',
+                    value: 60.48
+                },
+                {
+                    id: 'list',
+                    value: 'Opt 1'
+                },
+                {
+                    id: 'toggle',
+                    value: "true"
+                },
+
+            ]
+
+        ];
+
     }
 
-    render(){
-        return(
-            this.buildGrid()
-        );
-    }
-}
-
-class App extends Component {
   render() {
     return (
-      <Grid />
+      <Grid columns={this.columns} rows={this.rows} />
     );
   }
 }
