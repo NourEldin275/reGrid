@@ -87,7 +87,7 @@ class Grid extends Component{
                 column: columnName,
                 direction: direction
             }
-        });
+        }, this.props.remoteSortHandler(this.state.sort));
     }
 
     onFilterChangeHandler(event){
@@ -251,6 +251,7 @@ class App extends Component {
 
         this.rows = [];
         this.remoteFilterHandler = this.remoteFilterHandler.bind(this);
+        this.remoteSortHandler = this.remoteSortHandler.bind(this);
         this.createRows = this.createRows.bind(this);
         this.state = {
             rows: this.rows
@@ -260,6 +261,12 @@ class App extends Component {
     remoteFilterHandler(filters){
         // This is where Ajax requests are sent and then the rows in the state of this component should be updated to update the grid
         this.createRows(10);
+    }
+
+    remoteSortHandler(sortBy){
+        // This is where Ajax requests are sent to sort. Sorting and filtering need to be combined, this component state need to store
+        // both the sorting and filtering objects
+        this.createRows(20);
     }
 
     componentWillMount(){
@@ -297,7 +304,12 @@ class App extends Component {
 
   render() {
     return (
-      <Grid columns={this.columns} rows={this.state.rows} remoteFilterHandler={this.remoteFilterHandler}/>
+      <Grid
+          columns={this.columns}
+          rows={this.state.rows}
+          remoteFilterHandler={this.remoteFilterHandler}
+          remoteSortHandler={this.remoteSortHandler}
+      />
     );
   }
 }
