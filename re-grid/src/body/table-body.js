@@ -2,30 +2,25 @@
  * Created by nour on 8/25/17.
  */
 import React, { Component } from 'react';
-import { Cell } from './cells/cells';
+import Row from './rows/row';
 
 class TableBody extends Component{
+
+
+    createRow(row, rowIndex){
+        return (
+            <Row
+                key={rowIndex}
+                rowData = {row}
+            />
+        );
+    }
 
     render(){
 
         let rows = [];
         for (let row of this.props.rows) {
-            let rowData = row.map((data) => {
-                return(
-                    <Cell
-                        key={data.id.toString()}
-                        value={data.value}
-                        editing={data.editing}
-                    />
-                );
-            });
-
-            let tableRow =
-                <tr
-                    key={this.props.rows.indexOf(row)}
-                    data-row-key={this.props.rows.indexOf(row)}
-                >{rowData}</tr>;
-            rows.push(tableRow);
+            rows.push(this.createRow(row,this.props.rows.indexOf(row)));
         }
 
         return(
