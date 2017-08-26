@@ -11,22 +11,22 @@ class EditableCell extends Component{
         const selectType = 'select';
         const checkboxType = 'checkbox';
 
-        let input = <td>{this.props.value}</td>;
+        let input = <td>{this.props.defaultValue}</td>;
         switch (settings.type){
             case textType:
-                input = <input type="text" defaultValue={this.props.value.toString()}/>;
+                input = <input type="text" defaultValue={this.props.defaultValue.toString()}/>;
                 break;
             case numberType:
                 input = <input
                     type="number"
-                    defaultValue={this.props.value.toString()}
+                    defaultValue={this.props.defaultValue.toString()}
                     min={settings.options.min}
                     max={settings.options.max}
                     step="any"
                 />;
                 break;
             case checkboxType:
-                input = <input type="checkbox" defaultChecked={this.props.value}/>;
+                input = <input type="checkbox" defaultChecked={this.props.defaultValue}/>;
                 break;
             case selectType:
                 let options = settings.options.options.map((option) =>
@@ -35,7 +35,7 @@ class EditableCell extends Component{
                 input = <select
                     name=""
                     id=""
-                    defaultValue={this.props.value}>{options}</select>;
+                    defaultValue={this.props.defaultValue}>{options}</select>;
                 break;
             default:
                 break;
@@ -55,7 +55,7 @@ function Cell(props) {
     if(props.editing && props.editing.enabled){
         return (
             <EditableCell
-                value={props.value}
+                defaultValue={props.value}
                 editing={props.editing}
             />
         );

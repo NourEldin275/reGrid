@@ -124,7 +124,7 @@ class Grid extends Component{
      * @param event
      */
     onFilterEnterHandler(event){
-        if(this.state.filters && event.keyCode === 13){
+        if(this.state.filters && event.keyCode === 13 && event.target.validity.valid){
             this.props.remoteFilterHandler(this.state.filters);
         }
     }
