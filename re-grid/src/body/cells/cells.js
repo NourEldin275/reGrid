@@ -17,13 +17,21 @@ class EditableCell extends Component{
                 input = <input type="text" defaultValue={this.props.defaultValue.toString()}/>;
                 break;
             case numberType:
-                input = <input
-                    type="number"
-                    defaultValue={this.props.defaultValue.toString()}
-                    min={settings.options.min}
-                    max={settings.options.max}
-                    step="any"
-                />;
+                if(settings.options){
+                    input = <input
+                        type="number"
+                        defaultValue={this.props.defaultValue.toString()}
+                        min={settings.options.min}
+                        max={settings.options.max}
+                        step="any"
+                    />;
+                }else{
+                    input = <input
+                        type="number"
+                        defaultValue={this.props.defaultValue.toString()}
+                        step="any"
+                    />;
+                }
                 break;
             case checkboxType:
                 input = <input type="checkbox" defaultChecked={this.props.defaultValue}/>;
