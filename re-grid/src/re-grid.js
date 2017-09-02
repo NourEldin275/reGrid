@@ -148,7 +148,7 @@ class ReGrid extends Component{
                         onFilterEnterHandler={this.onFilterEnterHandler}
                     />
                     </thead>
-                    <TableBody rows={rows} />
+                    <TableBody rows={rows} editSaveHandler={this.props.editSaveHandler}/>
                 </table>
 
                 <ReactPaginate previousLabel={"previous"}

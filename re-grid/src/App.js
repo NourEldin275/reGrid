@@ -146,6 +146,7 @@ class App extends Component {
         this.remoteFilterHandler = this.remoteFilterHandler.bind(this);
         this.remoteSortHandler = this.remoteSortHandler.bind(this);
         this.loadProducts = this.loadProducts.bind(this);
+        this.saveProducts = this.saveProducts.bind(this);
         this.state = {
             rows: this.rows,
             offset: 0,
@@ -291,6 +292,10 @@ class App extends Component {
         });
     };
 
+    saveProducts(rowData){
+        console.log(rowData);
+    }
+
   render() {
     return (
       <ReGrid
@@ -300,6 +305,7 @@ class App extends Component {
           remoteSortHandler={this.remoteSortHandler}
           pageCount={this.state.pageCount}
           handlePageClick={this.handlePageClick}
+          editSaveHandler={this.saveProducts}
       />
     );
   }

@@ -47,8 +47,7 @@ class Row extends Component{
         // Call save handler passed in props
         if(event.keyCode === 13){
             this.editModeToggleHandler();
-            console.log("Save the following data");
-            console.log(this.state.rowData);
+            this.props.editSaveHandler(this.state.rowData);
         }
     }
 

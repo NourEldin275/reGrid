@@ -12,6 +12,7 @@ class TableBody extends Component{
             <Row
                 key={rowIndex}
                 rowData = {row}
+                editSaveHandler={this.props.editSaveHandler}
             />
         );
     }
