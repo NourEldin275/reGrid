@@ -14,13 +14,13 @@ class EditableCell extends Component{
         let input = <td>{this.props.defaultValue}</td>;
         switch (settings.type){
             case textType:
-                input = <input type="text" defaultValue={this.props.defaultValue.toString()}/>;
+                input = <input type="text" value={this.props.defaultValue.toString()}/>;
                 break;
             case numberType:
                 if(settings.options){
                     input = <input
                         type="number"
-                        defaultValue={this.props.defaultValue.toString()}
+                        value={this.props.defaultValue.toString()}
                         min={settings.options.min}
                         max={settings.options.max}
                         step="any"
@@ -28,7 +28,7 @@ class EditableCell extends Component{
                 }else{
                     input = <input
                         type="number"
-                        defaultValue={this.props.defaultValue.toString()}
+                        value={this.props.defaultValue.toString()}
                         step="any"
                     />;
                 }
@@ -43,7 +43,7 @@ class EditableCell extends Component{
                 input = <select
                     name=""
                     id=""
-                    defaultValue={this.props.defaultValue}>{options}</select>;
+                    value={this.props.defaultValue}>{options}</select>;
                 break;
             default:
                 break;

@@ -206,7 +206,7 @@ class App extends Component {
                     id: 'p_product_name',
                     value: product.p_product_name,
                     editing: {
-                        enabled: false,
+                        enabled: true,
                         type: 'text'
                     }
                 },
@@ -214,7 +214,7 @@ class App extends Component {
                     id: 'p_item_price',
                     value: product.p_item_price,
                     editing: {
-                        enabled: false,
+                        enabled: true,
                         type: 'number',
                         options: {
                             min: 0,
@@ -226,7 +226,7 @@ class App extends Component {
                     id: 'p_items_in_stock',
                     value: product.p_items_in_stock,
                     editing: {
-                        enabled: false,
+                        enabled: true,
                         type: 'number',
                         options: {
                             min: 0,
@@ -238,7 +238,7 @@ class App extends Component {
                     id: 'category_name',
                     value: product.category_name,
                     editing: {
-                        enabled: false,
+                        enabled: true,
                         type: 'select',
                         options: {
                             options:[
