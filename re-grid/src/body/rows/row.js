@@ -8,9 +8,12 @@ class Row extends Component{
 
     constructor(props){
         super(props);
-        this.cellChangeHandler = this.cellChangeHandler.bind(this);
+        this.cellChangeHandler        = this.cellChangeHandler.bind(this);
+        this.editModeToggleHandler    = this.editModeToggleHandler.bind(this);
+        this.onKeyUpHandler           = this.onKeyUpHandler.bind(this);
         this.state = {
-            rowData: this.props.rowData
+            rowData: this.props.rowData,
+            editMode: false
         }
     }
 
@@ -34,6 +37,21 @@ class Row extends Component{
         }
     }
 
+    editModeToggleHandler(){
+        this.setState({
+            editMode: !this.state.editMode
+        });
+    }
+
+    onKeyUpHandler(event){
+        // Call save handler passed in props
+        if(event.keyCode === 13){
+            this.editModeToggleHandler();
+            console.log("Save the following data");
+            console.log(this.state.rowData);
+        }
+    }
+
     render(){
         let row = this.state.rowData;
         let rowCells = row.map((cell) => {
@@ -44,11 +62,25 @@ class Row extends Component{
                     editing={cell.editing}
                     changeHandler = {this.cellChangeHandler}
                     cellKey={cell.id.toString()}
+                    editMode={this.state.editMode}
                 />
             );
         });
 
-        return(<tr>{rowCells}</tr>);
+        if(this.state.editMode){
+            // removing double click handler to prevent it from firing while editing
+            return(
+                <tr onKeyUp={this.onKeyUpHandler}>
+                    {rowCells}
+                </tr>
+            );
+        }
+
+        return(
+            <tr onDoubleClick={this.editModeToggleHandler} onKeyUp={this.onKeyUpHandler}>
+                {rowCells}
+            </tr>
+        );
     }
 }
 

@@ -72,7 +72,7 @@ class EditableCell extends Component{
 
 function Cell(props) {
 
-    if(props.editing && props.editing.enabled){
+    if(props.editing && props.editing.enabled && props.editMode ){
         return (
             <EditableCell
                 defaultValue={props.value}
