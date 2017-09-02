@@ -8,7 +8,7 @@ import TableBody from './body/table-body';
 import ReactPaginate from 'react-paginate';
 
 
-class Grid extends Component{
+class ReGrid extends Component{
 
     constructor(props){
         super(props);
@@ -168,4 +168,4 @@ class Grid extends Component{
     }
 }
 
-export default Grid;
+export default ReGrid;

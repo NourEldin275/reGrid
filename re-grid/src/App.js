@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import Grid from './re-grid';
+import ReGrid from './re-grid';
 import jQuery from '../node_modules/jquery';
 
 class App extends Component {
@@ -293,7 +293,7 @@ class App extends Component {
 
   render() {
     return (
-      <Grid
+      <ReGrid
           columns={this.columns}
           rows={this.state.rows}
           remoteFilterHandler={this.remoteFilterHandler}
