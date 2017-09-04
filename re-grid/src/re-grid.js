@@ -161,7 +161,12 @@ class ReGrid extends Component{
                                onPageChange={this.props.handlePageClick}
                                containerClassName={"pagination"}
                                subContainerClassName={"pages pagination"}
-                               activeClassName={"active"}
+                               activeClassName={this.props.activeClassName}
+                               nextClassName={this.props.nextClassName}
+                               previousClassName={this.props.previousClassName}
+                               pageClassName={this.props.pageClassName}
+                               disabledClassName={this.props.disabledClassName}
+
                 />
             </div>
         );
