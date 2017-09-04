@@ -166,6 +166,7 @@ class ReGrid extends Component{
                                previousClassName={this.props.previousClassName}
                                pageClassName={this.props.pageClassName}
                                disabledClassName={this.props.disabledClassName}
+                               forcePage={this.props.forcePage}
 
                 />
             </div>
