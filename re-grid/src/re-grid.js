@@ -6,6 +6,7 @@ import HeaderRow from './header/columns-row';
 import HeaderFiltersRow from './header/filters-row';
 import TableBody from './body/table-body';
 import ReactPaginate from 'react-paginate';
+import './gridzilla.css';
 
 
 class ReGrid extends Component{
@@ -17,7 +18,8 @@ class ReGrid extends Component{
             sort: {
                 column: '',
                 direction: ''
-            }
+            },
+            disableClearButton: true
         };
         //TODO: Pass load data method from parent
         /*
@@ -37,6 +39,8 @@ class ReGrid extends Component{
         this.onFilterChangeHandler = this.onFilterChangeHandler.bind(this);
         this.handleSort = this.handleSort.bind(this);
         this.onFilterEnterHandler = this.onFilterEnterHandler.bind(this);
+        this.shouldClearButtonToggle = this.shouldClearButtonToggle.bind(this);
+        this.onClearButtonClick = this.onClearButtonClick.bind(this);
     }
 
     handleSort(event){
@@ -91,7 +95,8 @@ class ReGrid extends Component{
                 direction: direction
             }
         }, ()=> {
-            this.props.remoteSortHandler(this.state.sort)
+            this.props.remoteSortHandler(this.state.sort);
+            this.shouldClearButtonToggle();
         });
     }
 
@@ -131,44 +136,79 @@ class ReGrid extends Component{
     onFilterEnterHandler(event){
         if(this.state.filters && event.keyCode === 13 && event.target.validity.valid){
             this.props.remoteFilterHandler(this.state.filters);
+            this.shouldClearButtonToggle();
         }
+    }
+
+    /**
+     * Decides whether the clear button is enabled or disabled.
+     */
+    shouldClearButtonToggle(){
+        this.setState({
+            disableClearButton: !(Object.values(this.state.filters).length > 0 )
+        });
+    }
+
+
+    onClearButtonClick(){
+        this.setState({
+            filters: {},
+            disableClearButton: true
+        }, ()=>{
+            this.props.remoteFilterHandler(this.state.filters);
+        });
     }
 
     render(){
         const columns = this.props.columns;
         const rows = this.props.rows;
         return(
-            <div>
-                <table className="table table-bordered table-responsive">
-                    <thead>
-                    <HeaderRow columns={columns} onSort={this.handleSort} />
-                    <HeaderFiltersRow
-                        columns={columns}
-                        onFilterChangeHandler={this.onFilterChangeHandler}
-                        onFilterEnterHandler={this.onFilterEnterHandler}
-                    />
-                    </thead>
-                    <TableBody rows={rows} editSaveHandler={this.props.editSaveHandler}/>
-                </table>
+            <div className="container-fluid">
+                <div className="row">
+                    <div className="gridzilla-control-buttons col-md-12">
+                        <button disabled={this.state.disableClearButton} onClick={this.onClearButtonClick}>
+                            <span className="glyphicon glyphicon-repeat" aria-hidden="true"></span>
+                            Clear Filters
+                        </button>
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="gridzilla col-md-12">
+                        <table className="table table-bordered table-responsive">
+                            <thead>
+                            <HeaderRow columns={columns} onSort={this.handleSort} />
+                            <HeaderFiltersRow
+                                columns={columns}
+                                onFilterChangeHandler={this.onFilterChangeHandler}
+                                onFilterEnterHandler={this.onFilterEnterHandler}
+                            />
+                            </thead>
+                            <TableBody rows={rows} editSaveHandler={this.props.editSaveHandler}/>
+                        </table>
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="gridzilla-pagination col-md-12">
+                        <ReactPaginate previousLabel={"previous"}
+                                       nextLabel={"next"}
+                                       breakLabel={<a href="">...</a>}
+                                       breakClassName={"break-me"}
+                                       pageCount={this.props.pageCount}
+                                       marginPagesDisplayed={2}
+                                       pageRangeDisplayed={5}
+                                       onPageChange={this.props.handlePageClick}
+                                       containerClassName={"pagination"}
+                                       subContainerClassName={"pages pagination"}
+                                       activeClassName={this.props.activeClassName}
+                                       nextClassName={this.props.nextClassName}
+                                       previousClassName={this.props.previousClassName}
+                                       pageClassName={this.props.pageClassName}
+                                       disabledClassName={this.props.disabledClassName}
+                                       forcePage={this.props.forcePage}
 
-                <ReactPaginate previousLabel={"previous"}
-                               nextLabel={"next"}
-                               breakLabel={<a href="">...</a>}
-                               breakClassName={"break-me"}
-                               pageCount={this.props.pageCount}
-                               marginPagesDisplayed={2}
-                               pageRangeDisplayed={5}
-                               onPageChange={this.props.handlePageClick}
-                               containerClassName={"pagination"}
-                               subContainerClassName={"pages pagination"}
-                               activeClassName={this.props.activeClassName}
-                               nextClassName={this.props.nextClassName}
-                               previousClassName={this.props.previousClassName}
-                               pageClassName={this.props.pageClassName}
-                               disabledClassName={this.props.disabledClassName}
-                               forcePage={this.props.forcePage}
-
-                />
+                        />
+                    </div>
+                </div>
             </div>
         );
     }

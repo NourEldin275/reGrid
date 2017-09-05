@@ -1,0 +1,11 @@
+.gridzilla-pagination{
+    /*position: absolute;*/
+}
+
+.gridzilla{
+    overflow: scroll;
+}
+
+.gridzilla-control-buttons{
+    margin: 20px 0px;
+}

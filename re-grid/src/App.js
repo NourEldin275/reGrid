@@ -150,7 +150,7 @@ class App extends Component {
         this.state = {
             rows: this.rows,
             offset: 0,
-            perPage: 4
+            perPage: 8
         }
     }
 
