@@ -4,6 +4,7 @@
   "description": "A React grid.",
   "main": "./src/re-grid.js",
   "dependencies": {
+    "css-loader": "^0.28.7",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "react-paginate": "^4.4.3",
