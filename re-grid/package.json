@@ -1,8 +1,8 @@
 {
   "name": "re-grid",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "A React grid.",
-  "main": "./src/re-grid.js",
+  "main": "./lib/re-grid.min.js",
   "dependencies": {
     "css-loader": "^0.28.7",
     "react": "^15.6.1",

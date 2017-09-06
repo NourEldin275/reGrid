@@ -2,78 +2,31 @@
  * Created by nour on 8/25/17.
  */
 import React, { Component } from 'react';
+import FilterCell from './cells/filterCell';
 
 class HeaderFiltersRow extends Component{
 
-    buildFilterInput(column){
-        const textInput     = 'text';
-        const numberInput   = 'number';
-        const checkboxInput = 'checkbox';
-        const selectInput   = 'select';
-        const filterChangeHandler = this.props.onFilterChangeHandler;
-        const filterOnEnterHandler = this.props.onFilterEnterHandler;
-        let filter = '';
-        if (column.filter || column.filter.enabled){
-
-            switch (column.filter.type){
-                case textInput:
-                    filter = <input
-                        type={textInput}
-                        name={column.id}
-                        onChange={filterChangeHandler}
-                        onKeyUp={filterOnEnterHandler}
-                        placeholder={column.filter.placeHolder}
-                    />;
-                    break;
-                case numberInput:
-                    filter = <input
-                        type={numberInput}
-                        name={column.id}
-                        onChange={filterChangeHandler}
-                        onKeyUp={filterOnEnterHandler}
-                        min={column.filter.min}
-                        max={column.filter.max}
-                        step="any"
-                    />;
-                    break;
-                case checkboxInput:
-                    filter = <input
-                        type={checkboxInput}
-                        name={column.id}
-                        onChange={filterChangeHandler}
-                    />;
-                    break;
-                case selectInput:
-                    let selectOptions = column.filter.options.map((option) =>
-                        <option key={option.value.toString()} value={option.value}>
-                            {option.label}
-                        </option>
-                    );
-                    filter = <select name={column.id} onChange={filterChangeHandler}>
-                        {selectOptions}
-                    </select>;
-                    break;
-                case undefined:
-                    break;
-                default:
-                    console.error(
-                        'Unsupported input type passed as column filter type: ' + column.filter.type +
-                        ' on column ' + column.id
-                    );
-                    filter = '';
-            }
-            return filter;
-        }
-    }
-
     render(){
         const columns = this.props.columns;
-        const columnFilters = columns.map((column) =>
+        const columnFilters = columns.map((column) => {
 
-            <td key={column.id.toString()}>
-                {this.buildFilterInput(column)}
-            </td>
-        );
+            if (column.filter && column.filter.enabled){
+                return(
+                    <td key={column.id.toString()}>
+                        <FilterCell
+                            column={column}
+                            onFilterEnterHandler={this.props.onFilterEnterHandler}
+                            onFilterChangeHandler={this.props.onFilterChangeHandler}
+                            clearFilter={this.props.clearFilters}
+                        />
+                    </td>
+                );
+            }else{
+                return(
+                    <td key={column.id.toString()}></td>
+                );
+            }
+        });
 
         return (
             <tr>{columnFilters}</tr>

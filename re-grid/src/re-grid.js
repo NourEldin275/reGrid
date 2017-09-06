@@ -19,7 +19,8 @@ class ReGrid extends Component{
                 column: '',
                 direction: ''
             },
-            disableClearButton: true
+            disableClearButton: true,
+            clearFilters: false
         };
         //TODO: Pass load data method from parent
         /*
@@ -116,16 +117,13 @@ class ReGrid extends Component{
         }else{
             filters[filterName] = field.value;
         }
-        if(event.target.type === 'checkbox' || event.target.type === 'select-one'){
-            // fire remote filter for fields that need no Enter key stroke.
-            this.setState({
-                filters: filters
-            }, this.props.remoteFilterHandler(this.state.filters));
-        }else{
-            this.setState({
-                filters: filters
-            });
-        }
+
+        this.setState({filters}, ()=>{
+            if(field.type === 'checkbox' || field.type === 'select-one'){ // Fields that require no Enter key press
+                this.props.remoteFilterHandler(this.state.filters);
+            }
+            this.shouldClearButtonToggle(); // If there are filters enable the clear button
+        });
 
     }
 
@@ -136,7 +134,6 @@ class ReGrid extends Component{
     onFilterEnterHandler(event){
         if(this.state.filters && event.keyCode === 13 && event.target.validity.valid){
             this.props.remoteFilterHandler(this.state.filters);
-            this.shouldClearButtonToggle();
         }
     }
 
@@ -144,19 +141,39 @@ class ReGrid extends Component{
      * Decides whether the clear button is enabled or disabled.
      */
     shouldClearButtonToggle(){
-        this.setState({
-            disableClearButton: !(Object.values(this.state.filters).length > 0 )
-        });
+
+        let isClearButtonDisabled = !(Object.values(this.state.filters).length > 0 );
+        let buttonAndFilterClearState = {disableClearButton: isClearButtonDisabled};
+        if(!isClearButtonDisabled){
+            buttonAndFilterClearState.clearFilters = false;
+        }
+
+        this.setState(buttonAndFilterClearState);
     }
 
 
+    /**
+     * Handler invoked when the clear filter button is clicked
+     */
     onClearButtonClick(){
         this.setState({
             filters: {},
-            disableClearButton: true
+            disableClearButton: true,
+            clearFilters: true
         }, ()=>{
             this.props.remoteFilterHandler(this.state.filters);
         });
+    }
+
+    componentDidUpdate(prevProps, prevState){
+        // To toggle clearing filters just as soon as they are cleared
+        // to allow filter component to be changed
+        // without this, you have to enter the value in the filter twice
+        if(prevState.clearFilters){
+            this.setState({
+                clearFilters: false
+            });
+        }
     }
 
     render(){
@@ -181,6 +198,7 @@ class ReGrid extends Component{
                                 columns={columns}
                                 onFilterChangeHandler={this.onFilterChangeHandler}
                                 onFilterEnterHandler={this.onFilterEnterHandler}
+                                clearFilters={this.state.clearFilters && this.state.disableClearButton}
                             />
                             </thead>
                             <TableBody rows={rows} editSaveHandler={this.props.editSaveHandler}/>
