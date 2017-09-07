@@ -17,6 +17,7 @@ class HeaderFiltersRow extends Component{
                             column={column}
                             onFilterEnterHandler={this.props.onFilterEnterHandler}
                             onFilterChangeHandler={this.props.onFilterChangeHandler}
+                            onFilterDatePickerChangeHandler={this.props.onFilterDatePickerChangeHandler}
                             clearFilter={this.props.clearFilters}
                         />
                     </td>

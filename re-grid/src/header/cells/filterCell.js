@@ -2,11 +2,19 @@
  * Created by nour on 9/6/17.
  */
 import React, { Component } from 'react';
+import DayPickerInput from 'react-day-picker/DayPickerInput';
 
-const textInput     = 'text';
-const numberInput   = 'number';
-const checkboxInput = 'checkbox';
-const selectInput   = 'select';
+import 'react-day-picker/lib/style.css';
+import './filterCell.css';
+
+const _textInput     = 'text';
+const _numberInput   = 'number';
+const _checkboxInput = 'checkbox';
+const _selectInput   = 'select';
+const _date          = 'date';
+const _currentYear = new Date().getFullYear();
+const _fromMonth = new Date(_currentYear, 0);
+const _toMonth = new Date(_currentYear + 10, 11);
 
 class FilterCell extends Component{
     constructor(props){
@@ -14,10 +22,16 @@ class FilterCell extends Component{
 
         this.onFilterChange = this.onFilterChange.bind(this);
         this.setFilterValue = this.setFilterValue.bind(this);
+        this.handleDayChange = this.handleDayChange.bind(this);
+        this.handleYearMonthChange = this.handleYearMonthChange.bind(this);
 
-        this.state = {
-            value: ''
+        let state = {
+           value : ''
         };
+        if(props.column.filter.enabled && props.column.filter.type === _date){
+            state['month'] = _fromMonth;
+        }
+        this.state = state;
     }
 
     onFilterChange(event){
@@ -39,6 +53,27 @@ class FilterCell extends Component{
         return this.state.value;
     }
 
+    /**
+     * Date picker day changed.
+     * @param selectedDay
+     */
+    handleDayChange(selectedDay){
+
+        let value = selectedDay ?
+            selectedDay.format(this.props.column.filter.options.format) : '';
+
+        this.setState({value, selectedDay}, ()=> {
+            this.props.onFilterDatePickerChangeHandler(this.props.column.id, this.state.value);
+        });
+    }
+
+    /**
+     * Fired when the month is changed from the date picker
+     * @param month
+     */
+    handleYearMonthChange(month) {
+        this.setState({ month });
+    };
 
     buildFilterInput(){
         const filterOnEnterHandler = this.props.onFilterEnterHandler;
@@ -47,9 +82,9 @@ class FilterCell extends Component{
         if (column.filter || column.filter.enabled){
 
             switch (column.filter.type){
-                case textInput:
+                case _textInput:
                     filter =  <input
-                        type={textInput}
+                        type={_textInput}
                         name={column.id}
                         onChange={this.onFilterChange}
                         value={this.setFilterValue()}
@@ -57,9 +92,9 @@ class FilterCell extends Component{
                         placeholder={column.filter.placeHolder}
                     />;
                     break;
-                case numberInput:
+                case _numberInput:
                     filter =  <input
-                        type={numberInput}
+                        type={_numberInput}
                         name={column.id}
                         onChange={this.onFilterChange}
                         value={this.setFilterValue()}
@@ -69,15 +104,15 @@ class FilterCell extends Component{
                         step="any"
                     />;
                     break;
-                case checkboxInput:
+                case _checkboxInput:
                     filter = <input
-                        type={checkboxInput}
+                        type={_checkboxInput}
                         name={column.id}
                         onChange={this.onFilterChange}
                         value={this.setFilterValue()}
                     />;
                     break;
-                case selectInput:
+                case _selectInput:
                     let selectOptions = column.filter.options.map((option) =>
                         <option key={option.value.toString()} value={option.value}>
                             {option.label}
@@ -91,6 +126,25 @@ class FilterCell extends Component{
                         >
                             {selectOptions}
                         </select>;
+                    break;
+                case _date:
+
+                    let dayPickerProps = {
+                        month: this.state.month,
+                        fromMonth: _fromMonth,
+                        toMonth: _toMonth,
+                        captionElement: <YearMonthForm onChange={this.handleYearMonthChange} />,
+                        pagedNavigation: false
+                    };
+
+                    filter =
+                        <DayPickerInput
+                            name={column.id}
+                            format={column.filter.options.format}
+                            value={this.state.value}
+                            onDayChange={this.handleDayChange}
+                            dayPickerProps={dayPickerProps}
+                        />;
                     break;
                 case undefined:
                     console.error('Undefined Filter Object passed to filter in the following object');
@@ -111,6 +165,37 @@ class FilterCell extends Component{
         return this.buildFilterInput();
     }
 
+}
+
+
+// Component will receive date, locale and localeUtils props
+function YearMonthForm({ date, localeUtils, onChange }) {
+    const months = localeUtils.getMonths();
+
+    const years = [];
+    for (let i = _fromMonth.getFullYear(); i <= _toMonth.getFullYear(); i += 1) {
+        years.push(i);
+    }
+
+    const handleChange = function handleChange(e) {
+        const { year, month } = e.target.form;
+        onChange(new Date(year.value, month.value));
+    };
+
+    return (
+        <form className="DayPicker-Caption">
+            <select name="month" onChange={handleChange} value={date.getMonth()}>
+                {months.map((month, i) => <option key={i} value={i}>{month}</option>)}
+            </select>
+            <select name="year" onChange={handleChange} value={date.getFullYear()}>
+                {years.map((year, i) =>
+                    <option key={i} value={year}>
+                        {year}
+                    </option>
+                )}
+            </select>
+        </form>
+    );
 }
 
 export default FilterCell;

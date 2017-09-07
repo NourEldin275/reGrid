@@ -139,6 +139,17 @@ class App extends Component {
                         ]
                     }
                 }
+            },
+            {
+                label: 'Date',
+                id: 'product_date',
+                filter:{
+                    enabled: true,
+                    type: 'date',
+                    options: {
+                        format: "YYYY/MM/DD"
+                    }
+                }
             }
         ];
 
@@ -274,6 +285,10 @@ class App extends Component {
                             ]
                         }
                     }
+                },
+                {
+                    id: 'product_date',
+                    value: '1992/05/27'
                 }
             ]);
         }

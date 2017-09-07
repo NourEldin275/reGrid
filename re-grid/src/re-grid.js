@@ -42,6 +42,7 @@ class ReGrid extends Component{
         this.onFilterEnterHandler = this.onFilterEnterHandler.bind(this);
         this.shouldClearButtonToggle = this.shouldClearButtonToggle.bind(this);
         this.onClearButtonClick = this.onClearButtonClick.bind(this);
+        this.onFilterDatePickerChangeHandler = this.onFilterDatePickerChangeHandler.bind(this);
     }
 
     handleSort(event){
@@ -128,6 +129,21 @@ class ReGrid extends Component{
     }
 
     /**
+     * Receives the filter name and the value to fire the filter handlers.
+     * @param filterName
+     * @param value
+     */
+    onFilterDatePickerChangeHandler(filterName, value){
+        let filters = this.state.filters;
+        filters[filterName] = value;
+
+        this.setState({filters}, ()=>{
+            this.props.remoteFilterHandler(this.state.filters);
+            this.shouldClearButtonToggle();
+        });
+    }
+
+    /**
      * This method will call the passed remote filter handler only when "Enter" key is pressed.
      * @param event
      */
@@ -198,6 +214,7 @@ class ReGrid extends Component{
                                 columns={columns}
                                 onFilterChangeHandler={this.onFilterChangeHandler}
                                 onFilterEnterHandler={this.onFilterEnterHandler}
+                                onFilterDatePickerChangeHandler={this.onFilterDatePickerChangeHandler}
                                 clearFilters={this.state.clearFilters && this.state.disableClearButton}
                             />
                             </thead>
