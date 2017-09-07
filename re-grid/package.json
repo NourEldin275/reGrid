@@ -1,15 +1,13 @@
 {
   "name": "re-grid",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "A React grid.",
   "main": "./lib/re-grid.min.js",
   "homepage": "https://github.com/NourEldin275/reGrid",
   "dependencies": {
-    "css-loader": "^0.28.7",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
-    "react-paginate": "^4.4.3",
-    "react-scripts": "1.0.11"
+    "react-paginate": "^4.4.3"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -27,7 +25,9 @@
   "devDependencies": {
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
-    "webpack": "^3.5.5"
+    "webpack": "^3.5.5",
+    "css-loader": "^0.28.7",
+    "react-scripts": "1.0.11"
   },
   "keywords": [
     "react",
