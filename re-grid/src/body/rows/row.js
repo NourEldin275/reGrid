@@ -9,6 +9,7 @@ class Row extends Component{
     constructor(props){
         super(props);
         this.cellChangeHandler        = this.cellChangeHandler.bind(this);
+        this.dateCellChangeHandler    = this.dateCellChangeHandler.bind(this);
         this.editModeToggleHandler    = this.editModeToggleHandler.bind(this);
         this.onKeyUpHandler           = this.onKeyUpHandler.bind(this);
         this.state = {
@@ -27,6 +28,26 @@ class Row extends Component{
         let updated = rowData.map((cell) => {
             if(cell.id === cellId){
                 rowData[rowData.indexOf(cell)].value = event.target.value;
+                return true;
+            }
+            return false;
+        });
+
+        if(updated){
+            this.setState({rowData});
+        }
+    }
+
+    /**
+     * To handle adding the newly inserted date to the row data
+     * @param dateString
+     * @param cellId
+     */
+    dateCellChangeHandler(dateString, cellId){
+        let rowData = this.state.rowData;
+        let updated = rowData.map((cell) => {
+            if(cell.id === cellId){
+                rowData[rowData.indexOf(cell)].value = dateString;
                 return true;
             }
             return false;
@@ -62,6 +83,7 @@ class Row extends Component{
                     changeHandler = {this.cellChangeHandler}
                     cellKey={cell.id.toString()}
                     editMode={this.state.editMode}
+                    dateChangeHandler={this.dateCellChangeHandler}
                 />
             );
         });

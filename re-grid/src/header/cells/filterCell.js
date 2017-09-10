@@ -5,14 +5,13 @@ import React, { Component } from 'react';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
 
 import 'react-day-picker/lib/style.css';
-import './filterCell.css';
 
 const _textInput     = 'text';
 const _numberInput   = 'number';
 const _checkboxInput = 'checkbox';
 const _selectInput   = 'select';
 const _date          = 'date';
-const _format        = 'DD/MM/YYYY';
+const _format        = 'YYYY/MM/DD';
 const _currentYear   = new Date().getFullYear();
 const _fromYear      = new Date(0,0).getFullYear();
 const _fromMonth     = new Date(_fromYear, 0);

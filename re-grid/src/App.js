@@ -152,6 +152,19 @@ class App extends Component {
                         toMonth: new Date(new Date().getFullYear() + 2, 11) // Optional
                     }
                 }
+            },
+            {
+                label: 'Another Date',
+                id: 'category_date',
+                filter:{
+                    enabled: true,
+                    type: 'date',
+                    options: { // Optional
+                        format: "YYYY/MM/DD", // Optional
+                        fromMonth: new Date(new Date(30,0).getFullYear(), 0), // Optional
+                        toMonth: new Date(new Date().getFullYear() + 2, 11) // Optional
+                    }
+                }
             }
         ];
 
@@ -290,7 +303,29 @@ class App extends Component {
                 },
                 {
                     id: 'product_date',
-                    value: '1992/05/27'
+                    value: '1992/05/27',
+                    editing: {
+                        enabled: true,
+                        type: 'date',
+                        options: {
+                            format: "YYYY/MM/DD", // Optional
+                            fromMonth: new Date(new Date(30,0).getFullYear(), 0), // Optional
+                            toMonth: new Date(new Date().getFullYear() + 2, 11) // Optional
+                        }
+                    }
+                },
+                {
+                    id: 'category_date',
+                    value: '2009/05/27',
+                    editing: {
+                        enabled: true,
+                        type: 'date',
+                        options: {
+                            format: "YYYY/MM/DD", // Optional
+                            fromMonth: new Date(new Date(30,0).getFullYear(), 0), // Optional
+                            toMonth: new Date(new Date().getFullYear() + 2, 11) // Optional
+                        }
+                    }
                 }
             ]);
         }
