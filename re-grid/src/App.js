@@ -146,8 +146,10 @@ class App extends Component {
                 filter:{
                     enabled: true,
                     type: 'date',
-                    options: {
-                        format: "YYYY/MM/DD"
+                    options: { // Optional
+                        format: "YYYY/MM/DD", // Optional
+                        fromMonth: new Date(new Date(30,0).getFullYear(), 0), // Optional
+                        toMonth: new Date(new Date().getFullYear() + 2, 11) // Optional
                     }
                 }
             }

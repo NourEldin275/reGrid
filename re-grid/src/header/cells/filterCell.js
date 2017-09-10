@@ -12,9 +12,11 @@ const _numberInput   = 'number';
 const _checkboxInput = 'checkbox';
 const _selectInput   = 'select';
 const _date          = 'date';
-const _currentYear = new Date().getFullYear();
-const _fromMonth = new Date(_currentYear, 0);
-const _toMonth = new Date(_currentYear + 10, 11);
+const _format        = 'DD/MM/YYYY';
+const _currentYear   = new Date().getFullYear();
+const _fromYear      = new Date(0,0).getFullYear();
+const _fromMonth     = new Date(_fromYear, 0);
+const _toMonth       = new Date(_currentYear + 10, 11);
 
 class FilterCell extends Component{
     constructor(props){
@@ -29,7 +31,10 @@ class FilterCell extends Component{
            value : ''
         };
         if(props.column.filter.enabled && props.column.filter.type === _date){
-            state['month'] = _fromMonth;
+            state['month']  = props.column.filter.options && props.column.filter.options.fromMonth ?
+                props.column.filter.options.fromMonth : _fromMonth;
+            state['format'] = props.column.filter.options && props.column.filter.options.format ?
+                props.column.filter.options.format : _format;
         }
         this.state = state;
     }
@@ -60,7 +65,7 @@ class FilterCell extends Component{
     handleDayChange(selectedDay){
 
         let value = selectedDay ?
-            selectedDay.format(this.props.column.filter.options.format) : '';
+            selectedDay.format(this.state.format) : '';
 
         this.setState({value, selectedDay}, ()=> {
             this.props.onFilterDatePickerChangeHandler(this.props.column.id, this.state.value);
@@ -78,6 +83,8 @@ class FilterCell extends Component{
     buildFilterInput(){
         const filterOnEnterHandler = this.props.onFilterEnterHandler;
         const column = this.props.column;
+        const filterOptions = column.filter.options;
+
         let filter = '';
         if (column.filter || column.filter.enabled){
 
@@ -128,19 +135,23 @@ class FilterCell extends Component{
                         </select>;
                     break;
                 case _date:
-
+                    let fromMonth     = filterOptions && filterOptions.fromMonth ? filterOptions.fromMonth : _fromMonth;
+                    let toMonth       = filterOptions && filterOptions.toMonth   ? filterOptions.toMonth   : _toMonth;
                     let dayPickerProps = {
                         month: this.state.month,
-                        fromMonth: _fromMonth,
-                        toMonth: _toMonth,
-                        captionElement: <YearMonthForm onChange={this.handleYearMonthChange} />,
+                        fromMonth: fromMonth,
+                        toMonth: toMonth,
+                        captionElement: <YearMonthForm
+                            fromMonth={fromMonth}
+                            toMonth={toMonth}
+                            onChange={this.handleYearMonthChange} />,
                         pagedNavigation: false
                     };
 
                     filter =
                         <DayPickerInput
                             name={column.id}
-                            format={column.filter.options.format}
+                            format={this.state.format}
                             value={this.state.value}
                             onDayChange={this.handleDayChange}
                             dayPickerProps={dayPickerProps}
@@ -169,11 +180,11 @@ class FilterCell extends Component{
 
 
 // Component will receive date, locale and localeUtils props
-function YearMonthForm({ date, localeUtils, onChange }) {
+function YearMonthForm({ date, localeUtils, onChange, fromMonth, toMonth }) {
     const months = localeUtils.getMonths();
 
     const years = [];
-    for (let i = _fromMonth.getFullYear(); i <= _toMonth.getFullYear(); i += 1) {
+    for (let i = fromMonth.getFullYear(); i <= toMonth.getFullYear(); i += 1) {
         years.push(i);
     }
 
