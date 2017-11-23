@@ -10,6 +10,10 @@
     margin: 20px 0px;
 }
 
+.gridzilla-control-buttons button{
+    margin-right: 5px;
+}
+
 .DayPicker-Caption{
     margin-top: 25px;
     margin-bottom: 25px;

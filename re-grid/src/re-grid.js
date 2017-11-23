@@ -42,6 +42,7 @@ class ReGrid extends Component{
         this.onFilterEnterHandler = this.onFilterEnterHandler.bind(this);
         this.shouldClearButtonToggle = this.shouldClearButtonToggle.bind(this);
         this.onClearButtonClick = this.onClearButtonClick.bind(this);
+        this.onExportButtonClick = this.onExportButtonClick.bind(this);
         this.onFilterDatePickerChangeHandler = this.onFilterDatePickerChangeHandler.bind(this);
     }
 
@@ -181,6 +182,13 @@ class ReGrid extends Component{
         });
     }
 
+    /**
+     * Handler invoked when the export filter button is clicked
+     */
+    onExportButtonClick(){
+            this.props.remoteExportHandler(this.state.filters);
+    }
+
     componentDidUpdate(prevProps, prevState){
         // To toggle clearing filters just as soon as they are cleared
         // to allow filter component to be changed
@@ -195,6 +203,13 @@ class ReGrid extends Component{
     render(){
         const columns = this.props.columns;
         const rows = this.props.rows;
+        let exportButton = null;
+        if (this.onExportButtonClick) {
+          exportButton = <button disabled={!this.props.isExportButtonEnabled} onClick={this.onExportButtonClick}>
+              <span className="glyphicon glyphicon-repeat" aria-hidden="true"></span>
+              Export
+          </button>;
+        }
         return(
             <div className="container-fluid">
                 <div className="row">
@@ -203,6 +218,7 @@ class ReGrid extends Component{
                             <span className="glyphicon glyphicon-repeat" aria-hidden="true"></span>
                             Clear Filters
                         </button>
+                        {exportButton}
                     </div>
                 </div>
                 <div className="row">

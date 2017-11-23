@@ -170,13 +170,15 @@ class App extends Component {
 
         this.rows = [];
         this.remoteFilterHandler = this.remoteFilterHandler.bind(this);
+        this.remoteExportHandler = this.remoteExportHandler.bind(this);
         this.remoteSortHandler = this.remoteSortHandler.bind(this);
         this.loadProducts = this.loadProducts.bind(this);
         this.saveProducts = this.saveProducts.bind(this);
         this.state = {
             rows: this.rows,
             offset: 0,
-            perPage: 8
+            perPage: 8,
+            isExportButtonEnabled: true
         }
     }
 
@@ -185,6 +187,13 @@ class App extends Component {
         console.log(filters);
         this.setState({filters}, ()=>{
             this.loadProducts();
+        });
+    }
+
+    remoteExportHandler(filters){
+        // This is where Ajax requests are sent and then the rows in the state of this component should be updated to update the grid
+        this.setState({filters}, ()=>{
+            this.exportProducts();
         });
     }
 
@@ -216,6 +225,24 @@ class App extends Component {
             success: (response) =>{
                 console.log(response);
                 this.createRows(response);
+            }
+        });
+    }
+
+    exportProducts(){
+        this.setState({
+          isExportButtonEnabled: false
+        });
+        let url = 'http://localhost/simple-cart/web/app_dev.php/api/products?';
+        if(this.state.sort){
+            url += '&sortBy='+this.state.sort.column+'&sortDir='+this.state.sort.direction;
+        }
+
+        jQuery.ajax({
+            url: url,
+            crossDomain: true,
+            complete: () => {
+              this.setState({isExportButtonEnabled: true})
             }
         });
     }
@@ -354,6 +381,8 @@ class App extends Component {
           columns={this.columns}
           rows={this.state.rows}
           remoteFilterHandler={this.remoteFilterHandler}
+          remoteExportHandler={this.remoteExportHandler}
+          isExportButtonEnabled={this.state.isExportButtonEnabled}
           remoteSortHandler={this.remoteSortHandler}
           pageCount={this.state.pageCount}
           handlePageClick={this.handlePageClick}
