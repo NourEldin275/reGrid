@@ -224,7 +224,7 @@ class ReGrid extends Component{
         let exportButton = null;
         if (this.onExportButtonClick) {
           exportButton = <button disabled={!this.props.isExportButtonEnabled} onClick={this.onExportButtonClick}>
-              <span className="glyphicon glyphicon-repeat" aria-hidden="true"></span>
+              <span className="glyphicon glyphicon-save" aria-hidden="true"></span>
               Export
           </button>;
         }
