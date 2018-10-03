@@ -3,7 +3,10 @@
  */
 import React, { Component } from 'react';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
-
+import 'react-dates/initialize';
+import { DateRangePicker} from 'react-dates';
+import 'react-dates/lib/css/_datepicker.css';
+import './filterCell.css';
 import 'react-day-picker/lib/style.css';
 
 const _textInput     = 'text';
@@ -11,6 +14,7 @@ const _numberInput   = 'number';
 const _checkboxInput = 'checkbox';
 const _selectInput   = 'select';
 const _date          = 'date';
+const _date_range    = 'date_range';
 const _format        = 'YYYY/MM/DD';
 const _currentYear   = new Date().getFullYear();
 const _fromYear      = new Date(0,0).getFullYear();
@@ -21,10 +25,11 @@ class FilterCell extends Component{
     constructor(props){
         super(props);
 
-        this.onFilterChange = this.onFilterChange.bind(this);
-        this.setFilterValue = this.setFilterValue.bind(this);
-        this.handleDayChange = this.handleDayChange.bind(this);
+        this.onFilterChange        = this.onFilterChange.bind(this);
+        this.setFilterValue        = this.setFilterValue.bind(this);
+        this.handleDayChange       = this.handleDayChange.bind(this);
         this.handleYearMonthChange = this.handleYearMonthChange.bind(this);
+        this.onDateRangeChange     = this.onDateRangeChange.bind(this);
 
         let state = {
            value : ''
@@ -32,10 +37,39 @@ class FilterCell extends Component{
         if(props.column.filter.enabled && props.column.filter.type === _date){
             state['month']  = props.column.filter.options && props.column.filter.options.fromMonth ?
                 props.column.filter.options.fromMonth : _fromMonth;
+        }
+
+        if(
+            props.column.filter.enabled
+            && (props.column.filter.type === _date || props.column.filter.type === _date_range)
+        ){
             state['format'] = props.column.filter.options && props.column.filter.options.format ?
                 props.column.filter.options.format : _format;
         }
+
+        if(props.column.filter.enabled && props.column.filter.type === _date_range){
+            // react-dates specific
+            state['start_date_id']        = props.column.id + '_start';
+            state['end_date_id']          = props.column.id + '_end';
+            state['endDatePlaceholder']   = props.column.filter.options.endDatePlaceholder;
+            state['startDatePlaceholder'] = props.column.filter.options.startDatePlaceholder;
+        }
         this.state = state;
+    }
+
+
+    onDateRangeChange(startDate, endDate){
+        let startValue = '';
+        let endValue   = '';
+        if(startDate){
+            startValue = startDate.format(this.state.format);
+        }
+        if(endDate){
+            endValue = endDate.format(this.state.format);
+        }
+        this.setState({startValue, endValue, startDate, endDate}, ()=> {
+            this.props.onDateRangeChangeHandler(this.props.column.id, startValue, endValue);
+        });
     }
 
     onFilterChange(event){
@@ -48,7 +82,9 @@ class FilterCell extends Component{
     componentWillReceiveProps(newProps){
         if(newProps.clearFilter){
             this.setState({
-                value: ''
+                value: '',
+                startDate: null,
+                endDate: null
             });
         }
     }
@@ -155,6 +191,24 @@ class FilterCell extends Component{
                             onDayChange={this.handleDayChange}
                             dayPickerProps={dayPickerProps}
                         />;
+                    break;
+                case _date_range:
+                    filter =
+                        <DateRangePicker
+                            startDate={this.state.startDate} // momentPropTypes.momentObj or null,
+                            startDateId={this.state.start_date_id} // PropTypes.string.isRequired,
+                            endDate={this.state.endDate} // momentPropTypes.momentObj or null,
+                            endDateId={this.state.end_date_id} // PropTypes.string.isRequired,
+                            onDatesChange={({ startDate, endDate }) => this.setState({ startDate, endDate })} // PropTypes.func.isRequired,
+                            onClose={({ startDate, endDate }) => this.onDateRangeChange( startDate, endDate)}
+                            focusedInput={this.state.focusedInput} // PropTypes.oneOf([START_DATE, END_DATE]) or null,
+                            onFocusChange={focusedInput => this.setState({ focusedInput })} // PropTypes.func.isRequired,
+                            block={true}
+                            small={true}
+                            startDatePlaceholderText={this.state.startDatePlaceholder}
+                            endDatePlaceholderText={this.state.endDatePlaceholder}
+                        />
+                    ;
                     break;
                 case undefined:
                     console.error('Undefined Filter Object passed to filter in the following object');

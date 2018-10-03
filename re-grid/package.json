@@ -1,12 +1,13 @@
 {
   "name": "re-grid",
-  "version": "0.2.0",
+  "version": "0.4.0",
   "description": "React Gridzilla, a React grid component with decent amount of options and flexibility. Built on Bootstrap framework and other React component such as React Paginate and React Day Picker.",
   "main": "./lib/re-grid.min.js",
   "homepage": "https://github.com/NourEldin275/reGrid",
   "dependencies": {
     "moment": "^2.18.1",
     "react": "^15.6.1",
+    "react-dates": "^18.1.0",
     "react-day-picker": "^6.1.0",
     "react-dom": "^15.6.1",
     "react-paginate": "^4.4.3"

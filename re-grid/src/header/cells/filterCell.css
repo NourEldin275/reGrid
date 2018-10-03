@@ -1,0 +1,4 @@
+/* Override react-dates styles*/
+.DateRangePicker{
+    min-width: 210px;
+}

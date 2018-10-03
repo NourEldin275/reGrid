@@ -141,20 +141,20 @@ class App extends Component {
                 }
             },
             {
-                label: 'Date',
+                label: 'Date Range',
                 id: 'product_date',
                 filter:{
                     enabled: true,
-                    type: 'date',
-                    options: { // Optional
-                        format: "YYYY/MM/DD", // Optional
-                        fromMonth: new Date(new Date(30,0).getFullYear(), 0), // Optional
-                        toMonth: new Date(new Date().getFullYear() + 2, 11) // Optional
+                    type: 'date_range',
+                    options: {
+                        format: "YYYY/MM/DD", // Optional,
+                        startDatePlaceholder: 'Start Date', // Optional,
+                        endDatePlaceholder: 'End Date', // Optional,
                     }
                 }
             },
             {
-                label: 'Another Date',
+                label: 'Date',
                 id: 'category_date',
                 filter:{
                     enabled: true,
