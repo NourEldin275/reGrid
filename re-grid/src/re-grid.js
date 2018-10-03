@@ -37,13 +37,14 @@ class ReGrid extends Component{
          onEditRemote: callback used to edit data remotely.
 
          */
-        this.onFilterChangeHandler = this.onFilterChangeHandler.bind(this);
-        this.handleSort = this.handleSort.bind(this);
-        this.onFilterEnterHandler = this.onFilterEnterHandler.bind(this);
-        this.shouldClearButtonToggle = this.shouldClearButtonToggle.bind(this);
-        this.onClearButtonClick = this.onClearButtonClick.bind(this);
-        this.onExportButtonClick = this.onExportButtonClick.bind(this);
+        this.onFilterChangeHandler           = this.onFilterChangeHandler.bind(this);
+        this.handleSort                      = this.handleSort.bind(this);
+        this.onFilterEnterHandler            = this.onFilterEnterHandler.bind(this);
+        this.shouldClearButtonToggle         = this.shouldClearButtonToggle.bind(this);
+        this.onClearButtonClick              = this.onClearButtonClick.bind(this);
+        this.onExportButtonClick             = this.onExportButtonClick.bind(this);
         this.onFilterDatePickerChangeHandler = this.onFilterDatePickerChangeHandler.bind(this);
+        this.onDateRangeChangeHandler        = this.onDateRangeChangeHandler.bind(this);
     }
 
     handleSort(event){
@@ -145,6 +146,23 @@ class ReGrid extends Component{
     }
 
     /**
+     * Receives the date range filter name and appends a suffix to the filter name to denote the relevant date.
+     *
+     * @param filterName
+     * @param startDate
+     * @param endDate
+     */
+    onDateRangeChangeHandler(filterName, startDate, endDate){
+        let filters = this.state.filters;
+        filters[filterName + '_startDate'] = startDate;
+        filters[filterName + '_endDate']   = endDate;
+        this.setState({filters}, ()=>{
+            this.props.remoteFilterHandler(this.state.filters);
+            this.shouldClearButtonToggle();
+        });
+    }
+
+    /**
      * This method will call the passed remote filter handler only when "Enter" key is pressed.
      * @param event
      */
@@ -231,6 +249,7 @@ class ReGrid extends Component{
                                 onFilterChangeHandler={this.onFilterChangeHandler}
                                 onFilterEnterHandler={this.onFilterEnterHandler}
                                 onFilterDatePickerChangeHandler={this.onFilterDatePickerChangeHandler}
+                                onDateRangeChangeHandler={this.onDateRangeChangeHandler}
                                 clearFilters={this.state.clearFilters && this.state.disableClearButton}
                             />
                             </thead>
