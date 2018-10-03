@@ -207,6 +207,7 @@ class FilterCell extends Component{
                             small={true}
                             startDatePlaceholderText={this.state.startDatePlaceholder}
                             endDatePlaceholderText={this.state.endDatePlaceholder}
+                            isOutsideRange={() => false}
                         />
                     ;
                     break;
